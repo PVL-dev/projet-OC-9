@@ -16,7 +16,7 @@
 
  describe('Given I am connected as an employee', () => {
    beforeEach(() => {
-     // Affiche les données de la page employé
+     // On commence par afficher les données de la page employé
      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
      window.localStorage.setItem(
        'user',
@@ -26,6 +26,8 @@
        })
      )
    })
+
+
    describe('When I am on NewBill Page', () => {
      // L'icône mail doit être en surbrillance
      test('Then mail icon in vertical layout should be highlighted', async () => {
@@ -35,10 +37,11 @@
        router()
        window.onNavigate(ROUTES_PATH.NewBill)
        await waitFor(() => screen.getByTestId('icon-mail'))
-       const mailIcon = screen.getByTestId('icon-mail') // récupère l'icône par son testid
-       expect(mailIcon).toHaveClass('active-icon') //check si l'icône est en surbrillance - on vérifie si l'élément a la classe correspondante
+       const mailIcon = screen.getByTestId('icon-mail') // On récupère l'icône par son testid
+       expect(mailIcon).toHaveClass('active-icon') // On check si l'icône est en surbrillance (vérification de la classe correspondante)
      })
-     // le formulaire doit être présent à l'écran avec tous ses champs
+
+     // Le formulaire doit être présent à l'écran avec tous ses champs
      test('Then the form should be displayed', () => {
        const html = NewBillUI()
        document.body.innerHTML = html
@@ -53,18 +56,21 @@
        expect(screen.getByTestId('file')).toBeTruthy()
        expect(screen.getByRole('button')).toBeTruthy()
      })
-     //tests pour l'upload de fichier
+
+
+     // Tests pour l'upload de fichier
      describe('When I upload a file', () => {
-       // clear tous les mocks avant et après chaque test, assure que chaque test tourne bien avec le mock correct
+       // On clear tous les mocks avant et après chaque test, pour s'assurer que chaque test tourne bien avec le mock correct
        beforeEach(() => {
          jest.clearAllMocks()
        })
        afterEach(() => {
          jest.clearAllMocks()
        })
-       // on peut sélectionner un fichier png jpg ou jpeg
+
+       // On peut sélectionner un fichier png jpg ou jpeg
        test('Then, I can select a png, jpg or jpeg file', () => {
-         //affiche les données de la page
+         // On affiche les données de la page
          const html = NewBillUI()
          document.body.innerHTML = html
          const onNavigate = (pathname) => {
@@ -77,25 +83,26 @@
            localStorage: window.localStorage,
          })
  
-         const changeFile = jest.fn((e) => newBillContainer.handleChangeFile(e)) // créé la fonction à tester
-         const file = screen.getByTestId('file') // récupère l'input file
-         expect(file).toBeTruthy() // vérifie qu'il soit bien présent à l'écran
+         const changeFile = jest.fn((e) => newBillContainer.handleChangeFile(e)) // On crée la fonction à tester
+         const file = screen.getByTestId('file') // On récupère l'input file
+         expect(file).toBeTruthy() // On vérifie qu'il soit bien présent à l'écran
  
          const testFile = new File(['sample.jpg'], 'sample.jpg', {
            type: 'image/jpg',
-         }) // créé un fichier de type jpg à tester
+         }) // On crée un fichier de type jpg à tester
  
-         file.addEventListener('change', changeFile) // écoute la fonction au changement de fichier
-         userEvent.upload(file, testFile) // upload le fichier test
+         file.addEventListener('change', changeFile) // On écoute la fonction au changement de fichier
+         userEvent.upload(file, testFile) // On upload le fichier test
  
-         expect(changeFile).toHaveBeenCalled() // on s'attend à ce que la fonction ait été appellée
-         expect(file.files[0]).toEqual(testFile) // le fichier uploadé est bien le fichier test
-         expect(file.files[0].name).toBe('sample.jpg') // le nom du fichier correspond au fichier test
+         expect(changeFile).toHaveBeenCalled() // On s'attend à ce que la fonction ait été appellée
+         expect(file.files[0]).toEqual(testFile) // On vérifie que le fichier uploadé est bien le fichier test
+         expect(file.files[0].name).toBe('sample.jpg') // On vérifie que le nom du fichier correspond au fichier test
  
-         jest.spyOn(window, 'alert').mockImplementation(() => {}) // mock l'appel de l'alerte
-         expect(window.alert).not.toHaveBeenCalled() // s'attend à ce que l'alerte n'ai pas été appellée
+         jest.spyOn(window, 'alert').mockImplementation(() => {}) // On mock l'appel de l'alerte
+         expect(window.alert).not.toHaveBeenCalled() // On s'attend à ce que l'alerte n'ai pas été appellée
        })
-       // on ne peut pas upload un fichier qui n'est pas une image
+
+       // On ne peut pas upload un fichier qui n'est pas une image
        test("Then, I can't select a non-image file, and the page displays an alert", () => {
          const html = NewBillUI()
          document.body.innerHTML = html
@@ -115,24 +122,24 @@
  
          const testFile = new File(['sample test file'], 'sample.txt', {
            type: 'text/plain',
-         }) // crée un fichier à tester de type texte
+         }) // On crée un fichier à tester de type texte
  
          file.addEventListener('change', changeFile)
-         userEvent.upload(file, testFile) // upload le fichier test
+         userEvent.upload(file, testFile) // On upload le fichier test
  
          expect(changeFile).toHaveBeenCalled()
-         expect(file.files[0].name).not.toBe('sample.png') // s'attend à ce que le nom du fichier ne soit pas sample.png
-         expect(file.files[0].type).not.toBe('image/png') // s'attend à ce que le type de fichier ne soit pas une image png
+         expect(file.files[0].name).not.toBe('sample.png') // On s'attend à ce que le nom du fichier ne soit pas sample.png
+         expect(file.files[0].type).not.toBe('image/png') // On s'attend à ce que le type de fichier ne soit pas une image png
  
-         jest.spyOn(window, 'alert').mockImplementation(() => {}) // mock l'appel de l'alerte
-         expect(window.alert).toHaveBeenCalled() // s'attend à ce que l'alerte ait été appellée
-         expect(file.value).toBe('') // s'attend à ce que l'input file ait été vidé
+         jest.spyOn(window, 'alert').mockImplementation(() => {}) // On mock l'appel de l'alerte
+         expect(window.alert).toHaveBeenCalled() // On s'attend à ce que l'alerte ait été appellée
+         expect(file.value).toBe('') // On s'attend à ce que l'input file ait été vidé
        })
      })
    })
  })
  
- //Test d'intégration POST
+ // Test d'intégration POST
  describe('Given I am a user connected as Employee', () => {
    describe('When I submit a completed form', () => {
      test('Then a new bill should be created', async () => {
@@ -158,22 +165,23 @@
          store: mockStore,
          localStorage: window.localStorage,
        })
-       // créé les données d'une note de frais à tester
+
+       // On crée les données d'une note de frais à tester
        const sampleBill = {
          type: 'Hôtel et logement',
-         name: 'encore',
-         date: '2004-04-04',
-         amount: 400,
-         vat: 80,
-         pct: 20,
-         commentary: 'séminaire billed',
+         name: 'HotelLimperial',
+         date: '2000-10-10',
+         amount: 250,
+         vat: 45,
+         pct: 8,
+         commentary: 'Test POST',
          fileUrl:
            'https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a',
          fileName: 'preview-facture-free-201801-pdf-1.jpg',
          status: 'pending',
        }
  
-       // charge les données dans les champs correspondants
+       // On charge les données dans les champs correspondants
        screen.getByTestId('expense-type').value = sampleBill.type
        screen.getByTestId('expense-name').value = sampleBill.name
        screen.getByTestId('datepicker').value = sampleBill.date
@@ -184,21 +192,21 @@
  
        newBill.fileName = sampleBill.fileName
        newBill.fileUrl = sampleBill.fileUrl
- // TODO remplacer la fonction update avec un spyOn
-       newBill.updateBill = jest.fn() // crée fonction d'update
-       const handleSubmit = jest.fn((e) => newBill.handleSubmit(e)) // crée fonction de submit
+       newBill.updateBill = jest.fn() // On crée une fonction d'update
+       const handleSubmit = jest.fn((e) => newBill.handleSubmit(e)) // On crée une fonction de submit
  
-       const form = screen.getByTestId('form-new-bill') // récupère le formulaire
-       form.addEventListener('submit', handleSubmit) // écoute la fonction au submit
-       fireEvent.submit(form) // lance l'évènement submit
+       const form = screen.getByTestId('form-new-bill') // On récupère le formulaire
+       form.addEventListener('submit', handleSubmit) // On écoute le submit
+       fireEvent.submit(form) // On lance le submit
  
-       expect(handleSubmit).toHaveBeenCalled() // on s'attend à ce que la fonction submit ait été appellée
-       expect(newBill.updateBill).toHaveBeenCalled() // on s'attend à ce que la fonction d'update ait été appellée
+       expect(handleSubmit).toHaveBeenCalled() // On s'attend à ce que la fonction submit ait été appellée
+       expect(newBill.updateBill).toHaveBeenCalled() // On s'attend à ce que la fonction d'update ait été appellée
      })
-     // test erreur API
+
+     // Test erreur API
      test('fetches error from an API and fails with 500 error', async () => {
        jest.spyOn(mockStore, 'bills')
-       jest.spyOn(console, 'error').mockImplementation(() => {}) // empêche console.error jest error
+       jest.spyOn(console, 'error').mockImplementation(() => {})
        Object.defineProperty(window, 'localStorage', { value: localStorageMock })
        Object.defineProperty(window, 'location', {
          value: { hash: ROUTES_PATH['NewBill'] },
@@ -232,7 +240,9 @@
        form.addEventListener('submit', handleSubmit)
        fireEvent.submit(form)
        await new Promise(process.nextTick)
-       expect(console.error).toBeCalled() // s'attend à ce qu'une erreur soit appellée dans la console
+       expect(console.error).toBeCalled() // On s'attend à ce qu'une erreur soit appelée dans la console
      })
    })
  })
+
+ 

@@ -54,12 +54,12 @@ describe("Given I am connected as an employee", () => {
   /* -------------------- Test bouton nouvelle note de frais ------------------- */
   describe('When I click on the button to create a new bill', () => {
     test('Then, it should open the NewBill page', () => {
-      // défini le chemin d'accès
+      // On défini le chemin d'accès
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
 
-      //affiche les données de la page
+      // On affiche les données de la page
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'employee'
@@ -70,14 +70,14 @@ describe("Given I am connected as an employee", () => {
       })
       document.body.innerHTML = BillsUI({ data: { bills } })
 
-      const openNewBillPage = jest.fn(billsContainer.handleClickNewBill); // créé la fonction à tester
-      const buttonNewBill = screen.getByTestId("btn-new-bill"); // récupère le bouton nouvelle note de frais
+      const openNewBillPage = jest.fn(billsContainer.handleClickNewBill); // On crée la fonction à tester
+      const buttonNewBill = screen.getByTestId("btn-new-bill"); // On récupère le bouton nouvelle note de frais
 
-      buttonNewBill.addEventListener('click', openNewBillPage); // écoute l'évènement au clic
-      userEvent.click(buttonNewBill); // simule le clic
+      buttonNewBill.addEventListener('click', openNewBillPage); // On écoute l'évènement au clic
+      userEvent.click(buttonNewBill); // On simule le clic
 
-      expect(openNewBillPage).toHaveBeenCalled(); // on s'attend à ce que la fonction ait été appellée et donc la page chargée
-      expect(screen.getByTestId('form-new-bill')).toBeTruthy(); // vérifie ensuite que le formulaire soit bien présent sur la page
+      expect(openNewBillPage).toHaveBeenCalled(); // On s'attend à ce que la fonction ait été appellée et donc la page chargée
+      expect(screen.getByTestId('form-new-bill')).toBeTruthy(); // On vérifie ensuite que le formulaire soit bien présent sur la page
     })
   })
 
@@ -85,13 +85,13 @@ describe("Given I am connected as an employee", () => {
   describe('When I click on the eye icon', () => {
     test('Then, it should open the modal', () => {
 
-      $.fn.modal = jest.fn(); // Empêche une erreur jQuery
+      $.fn.modal = jest.fn(); // On empêche une erreur jQuery
 
-      // défini le chemin d'accès
+      // On défini le chemin d'accès
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
-      // affiche les données de la page
+      // On affiche les données de la page
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({ type: 'Employee' }));
   
@@ -104,16 +104,15 @@ describe("Given I am connected as an employee", () => {
       const iconView = screen.getAllByTestId('icon-eye')[0];
       const openViewModal = jest.fn(billsContainer.handleClickIconEye(iconView));
 
-      iconView.addEventListener('click', openViewModal); // Écoute l'évènement au clic
-      userEvent.click(iconView); // Simule le clic
+      iconView.addEventListener('click', openViewModal); // On écoute l'évènement au clic
+      userEvent.click(iconView); // On simule le clic
 
       expect(openViewModal).toHaveBeenCalled(); // On teste que la fonction ait été appelée et donc la page chargée
-      const modale = screen.getByTestId('modaleFileEmployee'); // On récupère la modale avec un data-testid qu'on a ajouté dans BillsUI
+      const modale = screen.getByTestId('modaleFileEmployee'); // On récupère la modale avec un data-testid (Ajouté dans BillsUI.js)
       expect(modale).toBeTruthy(); // On teste que la modale soit bien présente
     })
   })
 })
-
 
 
 // Test d'intégration GET
@@ -179,3 +178,4 @@ describe("Given I am a user connected as Employee", () => {
     })
   })
 })
+
